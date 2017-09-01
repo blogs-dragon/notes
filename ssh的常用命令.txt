@@ -1,0 +1,245 @@
+SSH 常用命令
+
+一、如何登录SSH，
+
+http://www.xxx.com/attachments/month_0906/090617103692b732b655e87d7a.png
+
+二、SSH 操作常用命令：
+
+ls /* 查看目录下的内容， 或 dir 命令
+
+cd mydir /* 进入mydir目录 */
+
+cd – /* 回上一级目录 */ 用cd .. 也一样
+
+cd ~ /* 回根目录 */
+
+rm -rf mydir /* 删除mydir目录 */
+
+rm go.tar /* 删除go.tar文件 */
+
+mv tools tool /* 把tools目录改名为tool */
+
+cp -a tool www /* 把tool目录下所有文件复制到www目录下
+
+pwd /* 显示当前所在的服务器路径。
+
+带路径常用操作如：
+
+cd /home/ftp1 /* 进入FTP1目录
+
+cp -a /home/ftp1/22 /home/ftp2/ /*将ftp1下的22目录，复制到ftp2
+
+三、SSH 下载、压缩、解压等命令：
+
+SSH上远程下载操作：
+
+wget 下载命令
+
+wget http://xxx.com/1.rar /*SSH下载 我站根目录下的1.rar包
+
+注：服务器之前下载非常快，只要带宽足够
+
+有时测试达到10M/s 能常下载源码可直接这样用，如下载DZ等
+
+nohup 为参数，关闭窗口后，还在继续传直到传完。退出SSH后，继续运行
+
+有的说加在前面，如 nohup wget http://xxx.com/1.rar
+
+可用于 FTP里的上传和下载
+
+打包、压缩、解压操作：
+
+压缩与解压：
+
+tar zxvf xxx.tar.gz /*将xxx.tar.gz 解压
+
+tar cfz xxx.tar.gz xxx.com /* 把xxx.com 目录压缩为xxx.tar.gz文件
+
+unzip xxx.zip /* 解压zip文件
+
+zip -r xxx.zip xxx.com /* 把xxx.com 目录压缩为xxx.zip文件
+
+rar x xxx.rar /* 解压rar文件
+
+rar a xxx.rar xxx.com /* 把xxx.com 目录压缩为xxx.rar文件
+
+注：还有很多种压缩、解压命令、格式，请自行百度搜索
+
+如：GZIP包解压用： ungzip xxx.gzip 就这样。
+
+打包:
+
+tar xvf xxx.tar /*将xxx.tar 解包
+
+tar cvf xxx.tar xxx.com /*将xxx.com 打包
+
+打包不是压缩，只是把文件组成一个包
+
+带路径常用操作如：
+
+zip -r xxx.zip /home/ftp1/xxx.com
+
+/* 用法为 将服务器home目录下的ftp1目录下的xxx.com目录，压缩为zip包
+
+/* 此方法在DH空间上，可在这个SSH帐户下压缩 另外的FTP下的目录和文件。
+
+四、SSH 上传、FTP等命令：
+
+进入FTP:
+
+ftp xxx.com /*直接以FTP链接xxx.com
+
+Name：xxx /*输入FTP：xxx
+
+Password: /*输入FTP密码,密码将不显示，只管输就是
+
+进入FTP后
+
+上传:
+
+FTP>put xxx.zip xxx.zip
+
+/*put是上传命令，第一个xxx.zip是本地文件名，第二个是远程文件名。。
+
+/*意思就是把本地的xxx.zip上传到远程FTP里，
+
+mput 是上传目录，将本地服务目录（和所有文件,子目录）上传到FTP里，
+
+但没测试成功 （好像要lftp支持）
+
+下传:
+
+FTP>get xxx.zip xxx.zip 从FTP下传xxx.zip 到本地服务器
+
+mget 是从FTP下传目录包括所有文件和子目录，但没测试成功 （好像要lftp支持）
+
+登录FTP时加个参数i 就不会提示 Y/N
+
+如：ftp -i xxx.com
+
+或 ftp>prompt
+
+以下是FTP里常用的： (注 lftp 里命令与FTP命令不同）
+
+TP>ls，列出远程Linux FTP服务器上当前路径下的目录和文件?
+
+FTP>dir，列出远程Linux FTP服务器上当前路径下的目录和文件(同上)?
+
+FTP>mkdir ，在远程Linux FTP服务器上当前路径下建立指定目录?
+
+FTP>rmdir ，删除远程Linux FTP服务器上当前路径下的指定目录?
+
+FTP>cd ，更改远程Linux FTP服务器上的工作目录?
+
+FTP>delete ，删除远程Linux FTP服务器上指定的文件?
+
+FTP>rename ，重命名远程Linux FTP服务器上指定的文件?
+
+FTP>close，从远程Linux FTP服务器断开但保留FTP命令参数提示?
+
+FTP>disconnect，从远程Linux FTP服务器断开但保留FTP命令参数提示(同上)?
+
+FTP>bye，结束和远程Linux FTP服务器的连接。
+
+FTP>quit，结束和远程Linux FTP服务器的连接(同上)。
+
+FTP>!，直接从远程Linux FTP服务器进入到本地shell中?
+
+FTP>exit，(接上步)从本地shell环境中返回到远程Linux FTP服务器环境下?
+
+FTP>!ls，列出本地机器上当前路径下的目录和文件?
+
+FTP>lcd ，更改本地机器的工作目录?
+
+FTP>?，显示ftp命令说明?
+
+FTP>help，显示ftp命令说明(同上)?
+
+[完全退出先close再exit]
+
+五、SSH里数据库备份、恢复：
+
+1、数据库备份命令：mysqldump
+
+参数： mysqldump -u数据库用户 -p密码 -h 数据库地址 数据库名 > 数据库文件
+
+例：
+
+mysqldump -uidc88a -pidc88b -h sql.idc.com xxxc > xxx.sql
+
+2、数据库恢复命令：mysql
+
+参数： mysql -u数据库用户 -p密码 -h 数据库地址 数据库名 < 数据库文件
+
+例：
+
+mysql -uidc88a -pidc88b -h sql.idc.com xxxc < xxx.sql
+
+注：如果你数据库支持远程链接，那么，可在任意服务器上备份数据库
+
+六、服务器相关命令 操作常用命令：
+
+free /*查看服务器使用内存情况，和剩余内存等
+
+uptime /* 查看服务器运行时间 和负载
+
+cat /proc/cpuinfo /* 查看CPU信息
+
+top /*查看服务器内存、CPU运行数据值
+
+uname -a /*查看主机信息 版本等
+
+ps -A /*查看所有进程
+
+who /*查看活动用户 如：SSH用户
+
+cat /root/.bash_history /* 查看命令历史 如在SSH下操作的
+
+cat /var/log/secure | grep ssh /* 查看安全日志 谁SSH登录了服务器
+
+dd if=/dev/zero of=test bs=64k count=4k oflag=dsync 硬盘性能测试 DH的46.6M/S
+
+chmod -R 777 ddb /*设置 ddb目录属性为777，-R 包括下面的所有文件和目录属性
+
+chmod +x ddb.sh /*设置ddb.sh 为可执行
+
+自动执行 Crontab的用法 ：
+
+yum install vixie-cron crontabs //安装Crontab
+
+crontab -l 查看 任务列表
+
+crontab -e 删除、添加，编辑任务
+
+5 */6 * * * /home/admin/ddb.sh 每6小时5分执行 ddb.sh
+
+15 1 15,30 * * /home/admin/ddb.sh 每月15，30日1时15分执行ddb.sh
+
+七、服务器相关的重启命令：
+
+注意路径，有些安装服务安装路径不同。但命令是一样的。
+
+/usr/sbin/apachectl restart /*重启apache
+
+/usr/sbin/apachectl stop /*停止apache
+
+/usr/sbin/apachectl start /*启动apache
+
+/sbin/service mysqld restart 重启 mysqld
+
+/etc/init.d/lighttpd restart 重启lighttpd服务器
+
+/usr/sbin/service httpd restart
+
+service mysqld status
+service mysqld restart
+
+service httpd restart
+service httpd status
+
+service kloxo start 重启kloxo
+
+reboot 重启 VPS
+
+poweroff 关机VPS
